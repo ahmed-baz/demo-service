@@ -20,7 +20,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
       - name: Build and push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v6
+        uses: mr-smithers-excellent/docker-build-push@v4
         with:
           image: ahmedbaz/demo-service:1.1
           registry: docker.io
