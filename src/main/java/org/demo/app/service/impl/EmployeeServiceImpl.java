@@ -3,6 +3,7 @@ package org.demo.app.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.demo.app.dto.EmployeeDto;
+import org.demo.app.exception.ResourceNotFoundException;
 import org.demo.app.mapper.EmployeeMapper;
 import org.demo.app.model.Employee;
 import org.demo.app.repo.EmployeeRepo;
@@ -36,7 +37,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto findById(String id) {
-        return employeeMapper.entityToDto(employeeRepo.findById(id).orElseThrow(() -> new RuntimeException("Not Found")));
+        return employeeMapper.entityToDto(employeeRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(id)));
+    }
+
+    @Override
+    public EmployeeDto findByEmail(String email) {
+        return employeeMapper.entityToDto(employeeRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email)));
     }
 
     @Override

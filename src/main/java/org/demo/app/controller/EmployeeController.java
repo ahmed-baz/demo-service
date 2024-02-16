@@ -30,6 +30,11 @@ public class EmployeeController {
         return employeeService.findById(id);
     }
 
+    @GetMapping("/email/{email}")
+    public EmployeeDto findByEmail(@PathVariable String email) {
+        return employeeService.findByEmail(email);
+    }
+
     @GetMapping("/count")
     public Long count() {
         return employeeService.count();

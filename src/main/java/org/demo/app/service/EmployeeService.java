@@ -13,6 +13,8 @@ public interface EmployeeService {
 
     EmployeeDto findById(String id);
 
+    EmployeeDto findByEmail(String email);
+
     Long count();
 
     EmployeeDto createOrUpdate(EmployeeDto employeeDto);
