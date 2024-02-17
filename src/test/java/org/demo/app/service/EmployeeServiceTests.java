@@ -58,6 +58,7 @@ class EmployeeServiceTests {
                 .build();
         Mockito.when(employeeRepo.save(Mockito.any(Employee.class))).thenReturn(employee);
         EmployeeDto savedEmployee = employeeService.createOrUpdate(employeeDto);
+        log.info(savedEmployee);
         assertNotNull(savedEmployee);
         assertEquals("ahmed.ali@gmail.com", savedEmployee.getEmail());
     }
