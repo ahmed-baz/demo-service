@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:
+  test_with_maven:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -28,7 +28,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: verify with Maven
-        run: ./mvnw -B verify --file pom.xml --settings ./.m2/settings.xml
+      - name: Run the Maven verify phase
+        run: mvn verify
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v4.0.0
