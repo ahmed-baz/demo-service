@@ -10,17 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: demo
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        volumes:
-          - postgres_dev:/var/lib/postgresql/data
-        ports:
-          - 5433:5432
     steps:
       - name: checkout the MASTER
         uses: actions/checkout@v3

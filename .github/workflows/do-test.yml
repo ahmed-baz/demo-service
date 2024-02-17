@@ -7,19 +7,9 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test_with_maven:
+  test:
+
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_DB: demo
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        volumes:
-          - postgres_dev:/var/lib/postgresql/data
-        ports:
-          - 5433:5432
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
