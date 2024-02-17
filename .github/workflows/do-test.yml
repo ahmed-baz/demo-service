@@ -1,0 +1,37 @@
+name: do CI test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: demo
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        volumes:
+          - postgres_dev:/var/lib/postgresql/data
+        ports:
+          - 5433:5432
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: verify with Maven
+        run: ./mvnw -B verify --file pom.xml --settings ./.m2/settings.xml
+        env:
+          gh_packages_username: ${{ secrets.PACKAGES_USERNAME }}
+          gh_packages_access_token: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@v4.0.0
