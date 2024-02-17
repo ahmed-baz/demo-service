@@ -30,8 +30,5 @@ jobs:
           cache: maven
       - name: verify with Maven
         run: ./mvnw -B verify --file pom.xml --settings ./.m2/settings.xml
-        env:
-          gh_packages_username: ${{ secrets.PACKAGES_USERNAME }}
-          gh_packages_access_token: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@v4.0.0
