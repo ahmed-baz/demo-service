@@ -44,7 +44,7 @@ jobs:
           cache: maven
       - name: run the maven verify phase
         run: mvn verify
-  push-to-docker:
+  push:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -67,7 +67,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
-    needs: build
+    needs: push
     runs-on: [ aws-ec2 ]
     steps:
       - name: pull image from docker hub
