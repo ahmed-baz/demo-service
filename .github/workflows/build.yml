@@ -14,7 +14,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: test
+          POSTGRES_DB: demo
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         volumes:
