@@ -30,5 +30,3 @@ jobs:
           cache: maven
       - name: Run the Maven verify phase
         run: mvn verify
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@v4.0.0
