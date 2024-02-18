@@ -1,4 +1,4 @@
-name: Build and push Docker image
+name: CI/CD workflow
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout the MASTER
+      - name: checkout the master
         uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -25,8 +25,19 @@ jobs:
       - name: Build and push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: ${{ secrets.DOCKER_USERNAME }}/demo-service
+          image: ahmedbaz/demo-service
           tags: 1.1, latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy:
+    needs: build
+    runs-on: [ aws-ec2 ]
+    steps:
+      - name: Pull Image from docker hub
+        run: docker pull ahmedbaz/demo-service:latest
+      - name: Delete old container
+        run: docker rm -f demo-service
+      - name: Run docker container
+        run: docker run -d -p 2222:2222 --name demo-service ahmedbaz/demo-service
