@@ -10,21 +10,25 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @Log4j2
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 class EmployeeServiceTests {
 
     @MockBean
@@ -46,8 +50,8 @@ class EmployeeServiceTests {
     }
 
     @Test
-    @DisplayName("JUnit test for create new Employee method")
-    void SaveEmployee() {
+    @DisplayName("JUnit test to create/update employee")
+    void testSaveOrUpdateEmployee() {
         EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(UUID.randomUUID().toString())
                 .firstName("Ahmed")
@@ -56,10 +60,38 @@ class EmployeeServiceTests {
                 .salary(new BigDecimal(15000))
                 .joinDate(LocalDate.now())
                 .build();
-        Mockito.when(employeeRepo.save(Mockito.any(Employee.class))).thenReturn(employee);
+        when(employeeRepo.save(Mockito.any(Employee.class))).thenReturn(employee);
         EmployeeDto savedEmployee = employeeService.createOrUpdate(employeeDto);
-        log.info(savedEmployee);
         assertNotNull(savedEmployee);
         assertEquals("ahmed.ali@gmail.com", savedEmployee.getEmail());
     }
+
+    @Test
+    @DisplayName("JUnit test to delete a employee")
+    void testDeleteEmployee() {
+        when(employeeRepo.findById(employee.getId())).thenReturn(Optional.of(employee));
+        String deleteId = employeeService.delete(employee.getId());
+        verify(employeeRepo, times(1)).deleteById(employee.getId());
+        assertNotNull(deleteId);
+        assertEquals(employee.getId(), deleteId);
+    }
+
+    @Test
+    @DisplayName("JUnit test to find employee by ID")
+    void testFindEmployeeById() {
+        when(employeeRepo.findById(Mockito.any(String.class))).thenReturn(Optional.of(employee));
+        EmployeeDto employeeDto = employeeService.findById(UUID.randomUUID().toString());
+        assertNotNull(employeeDto);
+        assertEquals("ahmed.ali@gmail.com", employeeDto.getEmail());
+    }
+
+    @Test
+    @DisplayName("JUnit test to find all employees")
+    void testFindAllEmployees() {
+        when(employeeRepo.findAll()).thenReturn(Collections.singletonList(employee));
+        List<EmployeeDto> list = employeeService.findList();
+        assertNotNull(list);
+        assertEquals(1, list.size());
+    }
+
 }
