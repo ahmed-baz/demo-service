@@ -20,7 +20,7 @@ jobs:
         volumes:
           - postgres_dev:/var/lib/postgresql/data
         ports:
-          - 5433:5432
+          - 5432:5432
     steps:
       - name: checkout the MASTER
         uses: actions/checkout@v3
