@@ -68,7 +68,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
     needs: push
-    runs-on: [ aws-ec2 ]
+    runs-on: [ self-hosted ]
     steps:
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:latest
