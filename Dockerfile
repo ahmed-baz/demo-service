@@ -4,4 +4,4 @@ WORKDIR /usr/local/bin/
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} demo-service.jar
 EXPOSE 2222
-ENTRYPOINT ["java","-jar","demo-service.jar"]
+ENTRYPOINT ["java","-jar","-Dspring-boot.run.profiles=prod","demo-service.jar"]
