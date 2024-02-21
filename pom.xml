@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.demo.app</groupId>
     <artifactId>demo-service</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <name>demo service</name>
     <description>demo service</description>
     <properties>
