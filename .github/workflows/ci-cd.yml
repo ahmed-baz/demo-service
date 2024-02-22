@@ -71,7 +71,7 @@ jobs:
     runs-on: [ self-hosted ]
     steps:
       - name: pull image from docker hub
-        run: docker pull ahmedbaz/demo-service:latest
+        run: docker pull ahmedbaz/demo-service:pilot
       - name: Delete old container
         run: docker rm -f demo-service
       - name: Run docker container
