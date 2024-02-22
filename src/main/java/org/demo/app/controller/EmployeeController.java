@@ -58,4 +58,10 @@ public class EmployeeController {
     public ResponseEntity<String> deleteEmployee(@PathVariable String id) {
         return ResponseEntity.ok(employeeService.delete(id));
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        employeeService.deleteAll();
+        return ResponseEntity.ok(null);
+    }
 }

@@ -9,6 +9,7 @@ import org.demo.app.model.Employee;
 import org.demo.app.repo.EmployeeRepo;
 import org.demo.app.service.EmployeeService;
 import org.demo.app.util.EmployeeUtil;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,5 +61,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String delete(String id) {
         employeeRepo.deleteById(id);
         return id;
+    }
+
+    @Async
+    @Override
+    public void deleteAll() {
+        employeeRepo.deleteAll();
     }
 }

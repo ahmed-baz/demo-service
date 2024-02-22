@@ -20,4 +20,6 @@ public interface EmployeeService {
     EmployeeDto createOrUpdate(EmployeeDto employeeDto);
 
     String delete(String id);
+
+    void deleteAll();
 }
