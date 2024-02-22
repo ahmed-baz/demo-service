@@ -73,6 +73,6 @@ jobs:
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:pilot
       - name: Delete old container
-        run: docker rm -f demo-service
+        run: docker rm -f demo-service-pilot
       - name: Run docker container
-        run: docker run -d -p 8080:2222 --name demo-service ahmedbaz/demo-service:pilot
+        run: docker run -d -p 8080:2222 --name demo-service-pilot ahmedbaz/demo-service:pilot
