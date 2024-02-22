@@ -20,7 +20,7 @@ jobs:
           cache: maven
       - name: build with Maven
         run: mvn clean install -Dmaven.test.skip=true
-  test:
+  do_test:
     needs: build
     runs-on: ubuntu-latest
     services:
@@ -44,8 +44,8 @@ jobs:
           cache: maven
       - name: run the maven verify phase
         run: mvn verify
-  push:
-    needs: test
+  prepare_image:
+    needs: do_test
     runs-on: ubuntu-latest
     steps:
       - name: checkout the master
@@ -62,12 +62,12 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: ahmedbaz/demo-service
-          tags: 1.4, latest
+          tags: pilot
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
-    needs: push
+    needs: prepare_image
     runs-on: [ self-hosted ]
     steps:
       - name: pull image from docker hub
@@ -75,4 +75,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f demo-service
       - name: Run docker container
-        run: docker run -d -p 2222:2222 --name demo-service ahmedbaz/demo-service
+        run: docker run -d -p 8080:2222 --name demo-service ahmedbaz/demo-service:pilot
