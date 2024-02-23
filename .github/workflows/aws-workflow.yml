@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: checkout the master
         uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
         run: mvn clean install -Dmaven.test.skip=true
   do_test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     services:
       postgres:
         image: postgres
@@ -44,7 +44,7 @@ jobs:
         run: mvn verify
   prepare_image:
     needs: do_test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: checkout the master
         uses: actions/checkout@v3
