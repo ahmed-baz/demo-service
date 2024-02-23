@@ -19,7 +19,7 @@ services:
     build: .
     image: ahmedbaz/demo-service:1.4
     ports:
-      - "8080:2222"
+      - "2222:2222"
     depends_on:
       - demo-service-db
     environment:
