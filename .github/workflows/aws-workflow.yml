@@ -2,7 +2,7 @@ name: CI/CD workflow to build/test and deploy on AWS EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feature/test_aws" ]
 
 jobs:
   build:
