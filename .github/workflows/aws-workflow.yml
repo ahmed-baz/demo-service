@@ -70,6 +70,8 @@ jobs:
     steps:
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:latest
+      - name: Stop old docker-compose
+        run: docker-compose down
       - name: Delete old container
         run: docker rm -f demo-service
       - name: Run docker compose
