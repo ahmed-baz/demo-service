@@ -72,7 +72,7 @@ jobs:
         run: docker pull ahmedbaz/demo-service:latest
       - name: Stop old docker-compose
         run: docker-compose down
-      - name: Delete old container
-        run: docker rm -f demo-service
+      - name: Delete old containers
+        run: docker rm -f demo-service demo-db
       - name: Run docker compose
         run: docker-compose up -d
