@@ -66,7 +66,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
     needs: prepare_image
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted,demo ]
     steps:
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:latest
