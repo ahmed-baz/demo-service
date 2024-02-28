@@ -30,10 +30,11 @@ jobs:
           POSTGRES_DB: demo
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          PGPORT: 5444
         volumes:
           - postgres_dev:/var/lib/postgresql/data
         ports:
-          - 5444:5432
+          - 5444:5444
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
@@ -62,17 +63,17 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: ahmedbaz/demo-service
-          tags: pilot
+          tags: latest,1.4
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
     needs: prepare_image
-    runs-on: [ self-hosted ]
+    runs-on: [ demo ]
     steps:
       - name: pull image from docker hub
-        run: docker pull ahmedbaz/demo-service:pilot
+        run: docker pull ahmedbaz/demo-service:latest
       - name: Delete old container
-        run: docker rm -f demo-service-pilot
+        run: docker rm -f demo-service demo-db
       - name: Run docker container
-        run: docker run -d -p 8080:2222 --name demo-service-pilot ahmedbaz/demo-service:pilot
+        run: docker-compose up -d
