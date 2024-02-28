@@ -2,6 +2,7 @@ package org.demo.app.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.demo.app.dto.EmployeeDto;
 import org.demo.app.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,7 @@ class EmployeeControllerTests {
 
     @BeforeEach
     public void setup() {
+        objectMapper.registerModule(new JavaTimeModule());
         EmployeeDto emp1 = EmployeeDto.builder()
                 .id(UUID.randomUUID().toString())
                 .firstName("Ahmed")
@@ -128,10 +130,12 @@ class EmployeeControllerTests {
     @DisplayName("JUnit test for updating employee")
     void testUpdateEmployee() throws Exception {
         EmployeeDto employee = EmployeeDto.builder()
+                .id(UUID.randomUUID().toString())
                 .firstName("Ahmed")
                 .lastName("Ali")
                 .email("ahmed.ali@gmail.com")
                 .salary(new BigDecimal(20000))
+                .joinDate(LocalDate.now())
                 .build();
         when(employeeService.createOrUpdate(employee)).thenReturn(employee);
         mockMvc.perform(put("/api/v1/employees")
