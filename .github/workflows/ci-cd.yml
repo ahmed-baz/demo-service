@@ -30,11 +30,10 @@ jobs:
           POSTGRES_DB: demo
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          PGPORT: 5444
         volumes:
           - postgres_dev:/var/lib/postgresql/data
         ports:
-          - 5444:5444
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
