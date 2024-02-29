@@ -2,9 +2,9 @@ name: CI/CD workflow to build/test and deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -73,6 +73,6 @@ jobs:
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:latest
       - name: Delete old container
-        run: docker rm -f demo-service demo-db
+        run: docker rm -f demo-service
       - name: Run docker container
-        run: docker-compose up -d
+        run: docker run -d -p 2222:2222 --name demo-service ahmedbaz/demo-service:latest
