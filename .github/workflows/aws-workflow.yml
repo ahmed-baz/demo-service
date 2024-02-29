@@ -66,8 +66,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy:
     needs: prepare_image
-    runs-on: [ demo ]
+    runs-on: [ self-hosted ]
     steps:
+      - uses: bitovi/github-actions-deploy-docker-to-ec2@v0.5.0
       - name: pull image from docker hub
         run: docker pull ahmedbaz/demo-service:latest
       - name: Stop old docker-compose
