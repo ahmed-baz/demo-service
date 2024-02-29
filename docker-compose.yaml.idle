@@ -1,29 +1,30 @@
 version: '3.8'
 
 services:
-  demo-service-db:
+  postgres-db:
+    container_name: demo-db-container
     image: postgres:alpine3.17
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: demo
-      PGPORT: 5432
+      PGPORT: 5444
     ports:
-      - "5432:5432"
+      - "5444:5444"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - demo-service-net
 
-  demo-service:
-    build: .
-    image: ahmedbaz/demo-service:1.4
+  api-service:
+    container_name: demo-service-container
+    image: ahmedbaz/demo-service:latest
     ports:
-      - "8080:2222"
+      - "2222:2222"
     depends_on:
-      - demo-service-db
+      - postgres-db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://demo-service-db:5432/demo
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5444/demo
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     networks:
