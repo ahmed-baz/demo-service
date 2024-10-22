@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_employee" author="Ahmed.Baz" labels="employee">
+        <sql>
+            create table employees
+            (
+                id         bigserial     not null,
+                first_name varchar(255)  not null,
+                last_name  varchar(255)  not null,
+                salary     numeric(8, 2) not null,
+                email      varchar(255)  not null,
+                join_date  timestamp(6),
+                constraint employees_id_pkey primary key (id),
+                constraint employees_email_ukey unique (email)
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

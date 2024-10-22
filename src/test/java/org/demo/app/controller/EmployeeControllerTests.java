@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -100,7 +99,7 @@ class EmployeeControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(employeeDto.getId())))
+                .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.email", is(employeeDto.getEmail())))
                 .andExpect(jsonPath("$.salary", is(15000)))
                 .andExpect(jsonPath("$").isNotEmpty());
@@ -138,7 +137,7 @@ class EmployeeControllerTests {
                 .joinDate(new Date())
                 .build();
         when(employeeService.update(1L, employee)).thenReturn(employee);
-        mockMvc.perform(put("/api/v1/employees")
+        mockMvc.perform(put("/api/v1/employees/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(employee))
