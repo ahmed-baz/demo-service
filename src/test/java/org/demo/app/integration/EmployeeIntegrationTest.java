@@ -2,7 +2,7 @@ package org.demo.app.integration;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.demo.app.model.Employee;
+import org.demo.app.model.EmployeeEntity;
 import org.demo.app.repo.EmployeeRepo;
 import org.demo.app.service.EmployeeService;
 import org.junit.jupiter.api.Assertions;
@@ -52,13 +52,13 @@ public class EmployeeIntegrationTest {
     @Sql(statements = "DELETE FROM EMPLOYEE WHERE ID='5'", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void testEmployeesList() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<List<Employee>> response = restTemplate.exchange(
+        ResponseEntity<List<EmployeeEntity>> response = restTemplate.exchange(
                 createURLWithPort(), HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
                 });
-        List<Employee> employeeList = response.getBody();
-        Assertions.assertNotNull(employeeList);
+        List<EmployeeEntity> employeeEntityList = response.getBody();
+        Assertions.assertNotNull(employeeEntityList);
         Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
-        Assertions.assertEquals(employeeList.size(), employeeService.findList().size());
-        Assertions.assertEquals(employeeList.size(), employeeRepo.findAll().size());
+        Assertions.assertEquals(employeeEntityList.size(), employeeService.findList().size());
+        Assertions.assertEquals(employeeEntityList.size(), employeeRepo.findAll().size());
     }
 }

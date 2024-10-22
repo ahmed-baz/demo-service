@@ -3,9 +3,9 @@ package org.demo.app.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.demo.app.dto.EmployeeDto;
-import org.demo.app.exception.ResourceNotFoundException;
+import org.demo.app.exception.EmployeeNotFoundException;
 import org.demo.app.mapper.EmployeeMapper;
-import org.demo.app.model.Employee;
+import org.demo.app.model.EmployeeEntity;
 import org.demo.app.repo.EmployeeRepo;
 import org.demo.app.service.EmployeeService;
 import org.demo.app.util.EmployeeUtil;
@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +25,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> createRandomList(int size) {
         List<EmployeeDto> employeeDtoList = EmployeeUtil.getEmployeeDtoList(size);
-        List<Employee> employees = employeeMapper.dtoListToEntityList(employeeDtoList);
-        employeeRepo.saveAll(employees);
-        return employeeMapper.entityListToDtoList(employees);
+        List<EmployeeEntity> employeeEntities = employeeMapper.dtoListToEntityList(employeeDtoList);
+        employeeRepo.saveAll(employeeEntities);
+        return employeeMapper.entityListToDtoList(employeeEntities);
     }
 
     @Override
@@ -37,13 +36,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto findById(String id) {
-        return employeeMapper.entityToDto(employeeRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(id)));
+    public EmployeeDto findById(Long id) {
+        return employeeMapper.entityToDto(employeeRepo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id)));
     }
 
     @Override
     public EmployeeDto findByEmail(String email) {
-        return employeeMapper.entityToDto(employeeRepo.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(email)));
+        return employeeMapper.entityToDto(employeeRepo.findByEmail(email).orElseThrow(() -> new EmployeeNotFoundException(email)));
     }
 
     @Override
@@ -52,15 +51,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto createOrUpdate(EmployeeDto employeeDto) {
-        if (employeeDto.getId() == null) employeeDto.setId(UUID.randomUUID().toString());
+    public EmployeeDto create(EmployeeDto employeeDto) {
         return employeeMapper.entityToDto(employeeRepo.save(employeeMapper.dtoToEntity(employeeDto)));
     }
 
     @Override
-    public String delete(String id) {
+    public EmployeeDto update(Long id, EmployeeDto employeeDto) {
+        EmployeeEntity entity = employeeRepo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+        employeeMapper.updateEntity(employeeDto, entity);
+        return employeeMapper.entityToDto(employeeRepo.save(entity));
+    }
+
+    @Override
+    public void delete(Long id) {
+        employeeRepo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         employeeRepo.deleteById(id);
-        return id;
     }
 
     @Async

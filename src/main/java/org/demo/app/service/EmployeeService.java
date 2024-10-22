@@ -11,15 +11,17 @@ public interface EmployeeService {
 
     List<EmployeeDto> findList();
 
-    EmployeeDto findById(String id);
+    EmployeeDto findById(Long id);
 
     EmployeeDto findByEmail(String email);
 
     Long count();
 
-    EmployeeDto createOrUpdate(EmployeeDto employeeDto);
+    EmployeeDto create(EmployeeDto employeeDto);
 
-    String delete(String id);
+    EmployeeDto update(Long id, EmployeeDto employeeDto);
+
+    void delete(Long id);
 
     void deleteAll();
 }

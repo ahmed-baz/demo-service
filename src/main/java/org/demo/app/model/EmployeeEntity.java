@@ -2,14 +2,11 @@ package org.demo.app.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -17,11 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "EMPLOYEE")
-public class Employee {
+@Table(name = "employees")
+public class EmployeeEntity {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
@@ -30,7 +28,7 @@ public class Employee {
     private String email;
     private BigDecimal salary;
     @JsonFormat(pattern = "yyyy/MM/dd")
-    private LocalDate joinDate;
+    private Date joinDate;
 
 }
 

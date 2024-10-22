@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -46,20 +46,20 @@ class EmployeeControllerTests {
     public void setup() {
         objectMapper.registerModule(new JavaTimeModule());
         EmployeeDto emp1 = EmployeeDto.builder()
-                .id(UUID.randomUUID().toString())
+                .id(1L)
                 .firstName("Ahmed")
                 .lastName("Ali")
                 .email("ahmed.ali@gmail.com")
                 .salary(new BigDecimal(15000))
-                .joinDate(LocalDate.now())
+                .joinDate(new Date())
                 .build();
         EmployeeDto emp2 = EmployeeDto.builder()
-                .id(UUID.randomUUID().toString())
+                .id(2L)
                 .firstName("Ahmed")
                 .lastName("Hassan")
                 .email("ahmed.hassan@gmail.com")
                 .salary(new BigDecimal(20000))
-                .joinDate(LocalDate.now())
+                .joinDate(new Date())
                 .build();
         employeeDtoList.add(emp1);
         employeeDtoList.add(emp2);
@@ -94,7 +94,7 @@ class EmployeeControllerTests {
     @Test
     @DisplayName("JUnit test for finding employee by ID")
     void testFindEmployeeById() throws Exception {
-        String id = employeeDto.getId();
+        Long id = employeeDto.getId();
         when(employeeService.findById(id)).thenReturn(employeeDto);
         mockMvc.perform(get("/api/v1/employees/{id}", id))
                 .andDo(print())
@@ -115,7 +115,7 @@ class EmployeeControllerTests {
                 .email("ahmed.ali@gmail.com")
                 .salary(new BigDecimal(20000))
                 .build();
-        when(employeeService.createOrUpdate(employee)).thenReturn(employee);
+        when(employeeService.create(employee)).thenReturn(employee);
         MockHttpServletRequestBuilder httpServletRequestBuilder = post("/api/v1/employees")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON)
@@ -130,14 +130,14 @@ class EmployeeControllerTests {
     @DisplayName("JUnit test for updating employee")
     void testUpdateEmployee() throws Exception {
         EmployeeDto employee = EmployeeDto.builder()
-                .id(UUID.randomUUID().toString())
+                .id(1L)
                 .firstName("Ahmed")
                 .lastName("Ali")
                 .email("ahmed.ali@gmail.com")
                 .salary(new BigDecimal(20000))
-                .joinDate(LocalDate.now())
+                .joinDate(new Date())
                 .build();
-        when(employeeService.createOrUpdate(employee)).thenReturn(employee);
+        when(employeeService.update(1L, employee)).thenReturn(employee);
         mockMvc.perform(put("/api/v1/employees")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
@@ -150,10 +150,8 @@ class EmployeeControllerTests {
     @Test
     @DisplayName("JUnit test for deleting employee")
     void testDeleteEmployeeById() throws Exception {
-        String id = UUID.randomUUID().toString();
-        when(employeeService.delete(id)).thenReturn(id);
-        mockMvc.perform(delete("/api/v1/employees/{id}", id))
+        mockMvc.perform(delete("/api/v1/employees/{id}", 1L))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

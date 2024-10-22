@@ -30,7 +30,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> findById(@PathVariable String id) {
+    public ResponseEntity<EmployeeDto> findById(@PathVariable Long id) {
         return new ResponseEntity<>(employeeService.findById(id), HttpStatus.OK);
     }
 
@@ -45,18 +45,19 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
-        return new ResponseEntity<>(employeeService.createOrUpdate(employeeDto), HttpStatus.CREATED);
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto) {
+        return new ResponseEntity<>(employeeService.create(employeeDto), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto employeeDto) {
-        return ResponseEntity.ok(employeeService.createOrUpdate(employeeDto));
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDto) {
+        return ResponseEntity.ok(employeeService.update(id, employeeDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable String id) {
-        return ResponseEntity.ok(employeeService.delete(id));
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        employeeService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping

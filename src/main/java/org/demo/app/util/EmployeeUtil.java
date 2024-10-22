@@ -6,6 +6,7 @@ import org.demo.app.dto.EmployeeDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @UtilityClass
@@ -18,13 +19,12 @@ public class EmployeeUtil {
 
     public EmployeeDto createRandomEmployeeDto() {
         EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(UUID.randomUUID().toString());
         employeeDto.setFirstName(names[getRandomIndex()]);
         employeeDto.setLastName(names[getRandomIndex()]);
         String email = employeeDto.getFirstName() + "." +
-                employeeDto.getLastName() + "_" +
-                getRandomInt() + "@" +
-                mail[getRandomIndex()];
+                       employeeDto.getLastName() + "_" +
+                       getRandomInt() + "@" +
+                       mail[getRandomIndex()];
         employeeDto.setEmail(email.toLowerCase(Locale.ROOT));
         employeeDto.setSalary(generateRandomSalary(5000, 50000));
         employeeDto.setJoinDate(getRandomDate());
@@ -59,12 +59,13 @@ public class EmployeeUtil {
         return rand.nextInt(50000);
     }
 
-    private LocalDate getRandomDate() {
+    private Date getRandomDate() {
         Random random = new Random();
         int minDay = (int) LocalDate.of(2015, 1, 1).toEpochDay();
         int maxDay = (int) LocalDate.now().toEpochDay();
         long randomDay = random.nextInt(maxDay - minDay) + minDay;
-        return LocalDate.ofEpochDay(randomDay);
+        LocalDate localDate = LocalDate.ofEpochDay(randomDay);
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }
