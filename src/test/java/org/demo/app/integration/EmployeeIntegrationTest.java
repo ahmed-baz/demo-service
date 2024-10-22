@@ -48,8 +48,8 @@ public class EmployeeIntegrationTest {
     }
 
     @Test
-    @Sql(statements = "INSERT INTO EMPLOYEE(ID, FIRST_NAME, LAST_NAME, EMAIL,SALARY) VALUES ('5', 'Ahmed','Ali','ahmed.ali@stc.com',10000)", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(statements = "DELETE FROM EMPLOYEE WHERE ID='5'", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(statements = "insert into employees(id, first_name, last_name, email,salary) values (5666, 'Ahmed','Ali','ahmed.ali.c@stc.com.sa',10000)", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "delete from employees where id=5666", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void testEmployeesList() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         ResponseEntity<List<EmployeeEntity>> response = restTemplate.exchange(

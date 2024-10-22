@@ -38,7 +38,7 @@ class EmployeeControllerTests {
     @Autowired
     private MockMvc mockMvc;
     private EmployeeDto employeeDto;
-    private List<EmployeeDto> employeeDtoList = new ArrayList<>();
+    private final List<EmployeeDto> employeeDtoList = new ArrayList<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
