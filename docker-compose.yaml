@@ -18,7 +18,7 @@ services:
 
   api-service:
     container_name: demo-service-container
-    image: ahmedbaz/demo-service:latest
+    image: ahmedbaz/employee-service:latest
     ports:
       - "2222:2222"
     depends_on:
