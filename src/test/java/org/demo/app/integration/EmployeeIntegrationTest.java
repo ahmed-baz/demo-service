@@ -3,6 +3,7 @@ package org.demo.app.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.demo.app.model.EmployeeEntity;
+import org.demo.app.payload.AppResponse;
 import org.demo.app.repo.EmployeeRepo;
 import org.demo.app.service.EmployeeService;
 import org.junit.jupiter.api.Assertions;
@@ -52,12 +53,13 @@ public class EmployeeIntegrationTest {
     @Sql(statements = "delete from employees where id=5666", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void testEmployeesList() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<List<EmployeeEntity>> response = restTemplate.exchange(
+        ResponseEntity<AppResponse<List<EmployeeEntity>>> response = restTemplate.exchange(
                 createURLWithPort(), HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
                 });
-        List<EmployeeEntity> employeeEntityList = response.getBody();
+        List<EmployeeEntity> employeeEntityList = response.getBody().getData();
         Assertions.assertNotNull(employeeEntityList);
         Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getBody().getStatusCode());
         Assertions.assertEquals(employeeEntityList.size(), employeeService.findList().size());
         Assertions.assertEquals(employeeEntityList.size(), employeeRepo.findAll().size());
     }

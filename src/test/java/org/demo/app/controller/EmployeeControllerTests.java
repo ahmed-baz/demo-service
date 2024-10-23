@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -73,8 +74,8 @@ class EmployeeControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(employeeDtoList.size())))
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.data", hasSize(employeeDtoList.size())))
+                .andExpect(jsonPath("$.data").isArray());
     }
 
     @Test
@@ -83,10 +84,11 @@ class EmployeeControllerTests {
         when(employeeService.createRandomList(employeeDtoList.size())).thenReturn(employeeDtoList);
         mockMvc.perform(get("/api/v1/employees/create/{size}", employeeDtoList.size()))
                 .andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(employeeDtoList.size())))
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$.data", hasSize(employeeDtoList.size())))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.CREATED.value())))
+                .andExpect(jsonPath("$.data").isArray());
     }
 
 
@@ -99,10 +101,10 @@ class EmployeeControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.email", is(employeeDto.getEmail())))
-                .andExpect(jsonPath("$.salary", is(15000)))
-                .andExpect(jsonPath("$").isNotEmpty());
+                .andExpect(jsonPath("$.data.id", is(1)))
+                .andExpect(jsonPath("$.data.email", is(employeeDto.getEmail())))
+                .andExpect(jsonPath("$.data.salary", is(15000)))
+                .andExpect(jsonPath("$.data").isNotEmpty());
     }
 
     @Test
@@ -122,7 +124,8 @@ class EmployeeControllerTests {
 
         mockMvc.perform(httpServletRequestBuilder)
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.CREATED.value())))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -143,6 +146,7 @@ class EmployeeControllerTests {
                         .content(objectMapper.writeValueAsString(employee))
                 )
                 .andDo(print())
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.OK.value())))
                 .andExpect(status().isOk());
     }
 
@@ -151,6 +155,6 @@ class EmployeeControllerTests {
     void testDeleteEmployeeById() throws Exception {
         mockMvc.perform(delete("/api/v1/employees/{id}", 1L))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NO_CONTENT.value())));
     }
 }
