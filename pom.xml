@@ -18,6 +18,13 @@
         <lombok.version>1.18.24</lombok.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <mapstruct-lombok.version>0.2.0</mapstruct-lombok.version>
+        <sonar.coverage.exclusions>
+            **/org/demo/app/exception/*,
+            **/org/demo/app/util/*,
+            **/org/demo/app/dto/*,
+            **/org/demo/app/handler/*,
+            **/org/demo/app/payload/*,
+        </sonar.coverage.exclusions>
     </properties>
     <dependencies>
         <dependency>
