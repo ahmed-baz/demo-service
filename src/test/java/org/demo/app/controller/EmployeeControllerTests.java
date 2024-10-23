@@ -108,6 +108,34 @@ class EmployeeControllerTests {
     }
 
     @Test
+    @DisplayName("JUnit test for finding employee by email")
+    void testFindEmployeeByEmail() throws Exception {
+        String email = employeeDto.getEmail();
+        when(employeeService.findByEmail(email)).thenReturn(employeeDto);
+        mockMvc.perform(get("/api/v1/employees/query?email={email}", email))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data.id", is(1)))
+                .andExpect(jsonPath("$.data.email", is(employeeDto.getEmail())))
+                .andExpect(jsonPath("$.data.salary", is(15000)))
+                .andExpect(jsonPath("$.data").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("JUnit test for counting employees")
+    void testCountEmployees() throws Exception {
+        String email = employeeDto.getEmail();
+        when(employeeService.count()).thenReturn(25L);
+        mockMvc.perform(get("/api/v1/employees/count"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data", is(25)));
+    }
+
+    @Test
     @DisplayName("JUnit test for creating new employee")
     void testCreateEmployee() throws Exception {
         EmployeeDto employee = EmployeeDto.builder()

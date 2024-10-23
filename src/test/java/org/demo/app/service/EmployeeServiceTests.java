@@ -49,8 +49,8 @@ class EmployeeServiceTests {
     }
 
     @Test
-    @DisplayName("JUnit test to create/update employee")
-    void testSaveOrUpdateEmployee() {
+    @DisplayName("JUnit test to create employee")
+    void testCreateEmployee() {
         EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(1L)
                 .firstName("Ahmed")
@@ -61,6 +61,24 @@ class EmployeeServiceTests {
                 .build();
         when(employeeRepo.save(Mockito.any(EmployeeEntity.class))).thenReturn(employeeEntity);
         EmployeeDto savedEmployee = employeeService.create(employeeDto);
+        assertNotNull(savedEmployee);
+        assertEquals("ahmed.ali@gmail.com", savedEmployee.getEmail());
+    }
+
+    @Test
+    @DisplayName("JUnit test to update employee")
+    void testUpdateEmployee() {
+        EmployeeDto employeeDto = EmployeeDto.builder()
+                .id(1L)
+                .firstName("Ahmed")
+                .lastName("Ali")
+                .email("ahmed.ali@gmail.com")
+                .salary(new BigDecimal(15000))
+                .joinDate(new Date())
+                .build();
+        when(employeeRepo.findById(Mockito.any(Long.class))).thenReturn(Optional.of(employeeEntity));
+        when(employeeRepo.save(Mockito.any(EmployeeEntity.class))).thenReturn(employeeEntity);
+        EmployeeDto savedEmployee = employeeService.update(1L, employeeDto);
         assertNotNull(savedEmployee);
         assertEquals("ahmed.ali@gmail.com", savedEmployee.getEmail());
     }
@@ -83,12 +101,39 @@ class EmployeeServiceTests {
     }
 
     @Test
+    @DisplayName("JUnit test to find employee by ID")
+    void testFindEmployeeByEmail() {
+        when(employeeRepo.findByEmail(Mockito.any(String.class))).thenReturn(Optional.of(employeeEntity));
+        EmployeeDto employeeDto = employeeService.findByEmail("ahmed.ali@gmail.com");
+        assertNotNull(employeeDto);
+        assertEquals("ahmed.ali@gmail.com", employeeDto.getEmail());
+    }
+
+    @Test
     @DisplayName("JUnit test to find all employees")
     void testFindAllEmployees() {
         when(employeeRepo.findAll()).thenReturn(Collections.singletonList(employeeEntity));
         List<EmployeeDto> list = employeeService.findList();
         assertNotNull(list);
         assertEquals(1, list.size());
+    }
+
+    @Test
+    @DisplayName("JUnit test to create dummy employees list")
+    void testCreateEmployeeList() {
+        when(employeeRepo.findAll()).thenReturn(Collections.singletonList(employeeEntity));
+        List<EmployeeDto> list = employeeService.createRandomList(1);
+        assertNotNull(list);
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    @DisplayName("JUnit test to count employees")
+    void testCountEmployees() {
+        when(employeeRepo.count()).thenReturn(100L);
+        Long count = employeeService.count();
+        assertNotNull(count);
+        assertEquals(100, count);
     }
 
 }

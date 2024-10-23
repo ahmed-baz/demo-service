@@ -33,8 +33,8 @@ public class EmployeeController {
         return AppResponse.ok(employeeService.findById(id));
     }
 
-    @GetMapping("/email/{email}")
-    public AppResponse<EmployeeDto> findByEmail(@PathVariable String email) {
+    @GetMapping("/query")
+    public AppResponse<EmployeeDto> findByEmail(@RequestParam String email) {
         return AppResponse.ok(employeeService.findByEmail(email));
     }
 
